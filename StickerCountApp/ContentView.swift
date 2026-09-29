@@ -11,20 +11,22 @@ struct ContentView: View {
     @Environment(\.modelContext) private var context
     @State private var showCamera: Bool = false
     @State private var capturedImage: UIImage?
-
+    
     var body: some View {
-        VStack {
-            Button("保存") {
-                let newRecord = ConferenceRecord(name: "iOSDC", date: Date(), totalStickerCount: 42)
-                context.insert(newRecord)
-            }
-            Button("カメラを開く"){
-                showCamera = true
-            }
-        }
-        .sheet(isPresented: $showCamera) {
-            CameraView(image: $capturedImage)
-        }
+        CountButton()
+        //        VStack {
+        //            Button("保存") {
+        //                let newRecord = ConferenceRecord(name: "iOSDC", date: Date(), totalStickerCount: 42)
+        //                context.insert(newRecord)
+        //            }
+        //            Button("カメラを開く"){
+        //                showCamera = true
+        //            }
+        //        }
+        //        .sheet(isPresented: $showCamera) {
+        //            CameraView(image: $capturedImage)
+        //        }
+        //    }
     }
 }
 
