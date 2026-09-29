@@ -6,6 +6,22 @@
 //
 import Vision
 import UIKit
+import SwiftUI
+
+struct CountButton: View{
+    @State private var statusMessage: String = "「テスト実行」を押してください"
+    var body: some View {
+        Text(statusMessage)
+        Button("テスト実行"){
+            guard let testImage = UIImage(named: "testPanel") else {
+                statusMessage = "【エラー】 Assetsに「testPanel」画像が見つかりません"
+                return
+            }
+           let count = countStickers(in: testImage)
+            statusMessage = "【成功】 検出されたステッカー数: \(count)個"
+        }
+    }
+}
 
 func countStickers(in image: UIImage) -> Int {
     guard let cgImage = image.cgImage else { return 0 }
@@ -20,7 +36,7 @@ func countStickers(in image: UIImage) -> Int {
     // TODO: maximumImageDimensionを設定する(処理速度のための縮小サイズ)
     request.contrastAdjustment = 1.5
     request.detectsDarkOnLight = true
-    request.maximumImageDimension = 500
+    request.maximumImageDimension = 1000
     
     
     // ② 実行係を用意して、この写真を担当してもらう
@@ -47,12 +63,36 @@ func countStickers(in image: UIImage) -> Int {
     // ⑤ 一番外側の輪郭だけに絞る
     // TODO: topLevelContoursを取得する
     let contours = result.topLevelContours
+    print(contours)
     
     // ⑥ サイズが妥当な輪郭だけにフィルタリングする
     // TODO: normalizedPath.boundingBoxの面積で絞り込む
     let validContours = contours.filter { contour in
         let area = contour.normalizedPath.boundingBox.width * contour.normalizedPath.boundingBox.height
-        return area > 0.0005 && area < 0.02
+        return area > 0.0005 && area < 0.005
     }
-    return validContours.count   // TODO: 最終的にvalidContoursの数を返す
+    
+    // ① validContoursから、面積だけを取り出した配列を作る
+    let areas = validContours.map { contour in
+        return contour.normalizedPath.boundingBox.width * contour.normalizedPath.boundingBox.height
+    }
+
+    // ② その配列を中央値を求めるためにソートする
+    let sortedAreas = areas.sorted()
+    
+    // ③ 真ん中の値(中央値)を取り出す
+    let middleIndex = sortedAreas.count / 2
+    let middleItem = sortedAreas[middleIndex]
+    print(sortedAreas)
+
+    // ④ 合計面積を計算する
+    let sumArea = sortedAreas.reduce(0, +)
+    let sheets = Int(round(sumArea / middleItem))
+
+    // ⑤ 推定枚数 = 合計面積 ÷ 中央値(小数点は四捨五入)v
+    return sheets   // validContours.count の代わりにこちらを返す
+}
+
+#Preview {
+    CountButton()
 }
