@@ -13,7 +13,7 @@ struct CountButton: View{
     var body: some View {
         Text(statusMessage)
         Button("テスト実行"){
-            guard let testImage = UIImage(named: "testPanel") else {
+            guard let testImage = UIImage(named: "testPanel3") else {
                 statusMessage = "【エラー】 Assetsに「testPanel」画像が見つかりません"
                 return
             }
@@ -63,7 +63,7 @@ func countStickers(in image: UIImage) -> Int {
     // ⑤ 一番外側の輪郭だけに絞る
     // TODO: topLevelContoursを取得する
     let contours = result.topLevelContours
-    print(contours)
+    print("フィルタリング前：\(contours.count)")
     
     // ⑥ サイズが妥当な輪郭だけにフィルタリングする
     // TODO: normalizedPath.boundingBoxの面積で絞り込む
@@ -71,6 +71,7 @@ func countStickers(in image: UIImage) -> Int {
         let area = contour.normalizedPath.boundingBox.width * contour.normalizedPath.boundingBox.height
         return area > 0.0005 && area < 0.005
     }
+    print("フィルタリング後：\(validContours.count)")
     
     // ① validContoursから、面積だけを取り出した配列を作る
     let areas = validContours.map { contour in
@@ -79,6 +80,7 @@ func countStickers(in image: UIImage) -> Int {
 
     // ② その配列を中央値を求めるためにソートする
     let sortedAreas = areas.sorted()
+    print("面積の配列：\(sortedAreas)")
     
     // ③ 真ん中の値(中央値)を取り出す
     let middleIndex = sortedAreas.count / 2
