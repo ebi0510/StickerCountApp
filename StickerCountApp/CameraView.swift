@@ -14,7 +14,8 @@ struct CameraView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
 //  カメラモードに設定
-        picker.sourceType = .camera
+        picker.sourceType = .photoLibrary
+        picker.delegate = context.coordinator
         return picker
     }
 //  SwiftUI側の状態が変わるたびに、UIKitのビューコントローラを更新して同期を取る。こっちは何度も使う。
