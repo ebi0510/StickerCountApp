@@ -8,21 +8,6 @@ import Vision
 import UIKit
 import SwiftUI
 
-struct CountButton: View{
-    @State private var statusMessage: String = "「テスト実行」を押してください"
-    var body: some View {
-        Text(statusMessage)
-        Button("テスト実行"){
-            guard let testImage = UIImage(named: "testPanel3") else {
-                statusMessage = "【エラー】 Assetsに「testPanel」画像が見つかりません"
-                return
-            }
-           let count = countStickers(in: testImage)
-            statusMessage = "【成功】 検出されたステッカー数: \(count)個"
-        }
-    }
-}
-
 func countStickers(in image: UIImage) -> Int {
     guard let cgImage = image.cgImage else { return 0 }
     
@@ -93,8 +78,4 @@ func countStickers(in image: UIImage) -> Int {
 
     // ⑤ 推定枚数 = 合計面積 ÷ 中央値(小数点は四捨五入)v
     return sheets   // validContours.count の代わりにこちらを返す
-}
-
-#Preview {
-    CountButton()
 }
