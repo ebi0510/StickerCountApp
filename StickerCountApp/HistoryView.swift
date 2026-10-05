@@ -10,6 +10,7 @@ import SwiftData
 
 struct HistoryView: View {
     @Query(sort: \ConferenceRecord.date, order: .reverse) private var records: [ConferenceRecord]
+    @Environment(\.modelContext) private var context
     var onAdded: () -> Void
     
     var body: some View {
@@ -19,7 +20,11 @@ struct HistoryView: View {
                 Text(record.name)
                 Text("\(record.totalStickerCount)")
             }
-            
+        }
+        .onDelete { indexSet in
+            for index in indexSet {
+                context.delete(records[index])
+            }
         }
         }
         .toolbar {
@@ -31,3 +36,5 @@ struct HistoryView: View {
         }
     }
 }
+
+
