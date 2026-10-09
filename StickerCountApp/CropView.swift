@@ -36,6 +36,11 @@ struct CropView: View {
                             Color.clear
                                 .onAppear {
                                     imageFrame = geo.frame(in: .named("cropSpace"))
+                                    print("onAppear: \(geo.size)")
+                                }
+                                .onChange(of: geo.size) { oldValue, newValue in
+                                    imageFrame = geo.frame(in: .named("cropSpace"))
+                                    print("onChange: \(geo.size)")
                                 }
                         }
                     )
@@ -137,6 +142,6 @@ struct CropView: View {
 }
 
 #Preview {
-    CropView(image: UIImage(named: "testPanel")!,
+    CropView(image: UIImage(named: "testPanel3")!,
              onCropped: { _ in })
 }

@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 
 func countStickers(in image: UIImage) -> Int {
+    test(in: image)
     guard let cgImage = image.cgImage else { return 0 }
     
     // ① 「輪郭検出をしてください」という依頼書を作る
@@ -48,7 +49,27 @@ func countStickers(in image: UIImage) -> Int {
     // ⑤ 一番外側の輪郭だけに絞る
     // TODO: topLevelContoursを取得する
     let contours = result.topLevelContours
+    let validData = contours.map{ validData in
+        return validData.normalizedPath.boundingBox.width * validData.normalizedPath.boundingBox.height
+    }
+    let sortedData = validData.sorted()
+    let underData = validData.filter{ underData in
+        return underData < 0.0005
+    }
+    let overData = validData.filter{ overData in
+        return overData > 0.005
+    }
+    let allContours = contours.map { contour in
+        return contour.normalizedPath.boundingBox.width * contour.normalizedPath.boundingBox.height
+    }
+    let sortedAllContours = allContours.sorted().suffix(5)
+    
+    print("全体の面積：\(sortedData)")
+    print("下限より小さい：\(underData.count)")
+    print("上限より大きい：\(overData.count)")
     print("フィルタリング前：\(contours.count)")
+    print("フィルタリング前の面積の配列：\(allContours)")
+    print("フィルタリング前の大きい値（5個）：\(sortedAllContours)")
     
     // ⑥ サイズが妥当な輪郭だけにフィルタリングする
     // TODO: normalizedPath.boundingBoxの面積で絞り込む
@@ -65,7 +86,7 @@ func countStickers(in image: UIImage) -> Int {
 
     // ② その配列を中央値を求めるためにソートする
     let sortedAreas = areas.sorted()
-    print("面積の配列：\(sortedAreas)")
+    print("フィルタリング後の面積の配列：\(sortedAreas)")
     
     // ③ 真ん中の値(中央値)を取り出す
     let middleIndex = sortedAreas.count / 2
