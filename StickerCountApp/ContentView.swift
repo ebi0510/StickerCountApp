@@ -11,11 +11,12 @@ struct ContentView: View {
     @Environment(\.modelContext) private var context
     @State private var showCamera: Bool = false
     @State private var capturedImage: UIImage? = nil
-    @State private var flow: Flow = .history
+//    あとで.historyに直す
+    @State private var flow: Flow = .crop(UIImage(named: "testPanel3")!)
     
     enum Flow{
-        case history
-        case camera
+//        case history
+//        case camera
         case crop(UIImage)
         case result(Int)
     }
@@ -24,12 +25,12 @@ struct ContentView: View {
         
         NavigationStack {
             switch flow {
-            case .history:
-                HistoryView(onAdded: {
-                    flow = .camera
-                })
-            case .camera:
-                CameraView(image: $capturedImage)
+//            case .history:
+//                HistoryView(onAdded: {
+//                    flow = .camera
+//                })
+//            case .camera:
+//                CameraView(image: $capturedImage)
             case .crop(let image):
                 CropView(image: image,
                          onCropped: { croppedImage in
@@ -38,7 +39,8 @@ struct ContentView: View {
             case .result(let count):
                 ResultView(count: count,
                            onRecorded: {
-                    flow = .history
+//                    あとで.historyに戻す
+                    flow = .crop(UIImage(named: "testPanel3")!)
                 })
             }
         }
