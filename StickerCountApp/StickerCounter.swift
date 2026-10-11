@@ -9,21 +9,21 @@ import UIKit
 import SwiftUI
 
 func countStickers(in image: UIImage) -> Int {
-    test(in: image)
-    guard let cgImage = image.cgImage else { return 0 }
+    guard let mask = makeMask(in: image) else {
+        return 0
+    }
+    guard let cgImage = mask.cgImage else {
+        return 0
+    }
     
     // ① 「輪郭検出をしてください」という依頼書を作る
     // TODO: VNDetectContoursRequestのインスタンスを作る
     let request = VNDetectContoursRequest()
+    request.detectsDarkOnLight = false
     
     // 依頼書に条件を書き込む
-    // TODO: contrastAdjustmentを設定する(境界をくっきりさせる)
-    // TODO: detectsDarkOnLightを設定する(明るい背景+暗い対象物の前提)
     // TODO: maximumImageDimensionを設定する(処理速度のための縮小サイズ)
-    request.contrastAdjustment = 1.5
-    request.detectsDarkOnLight = true
     request.maximumImageDimension = 1000
-    
     
     // ② 実行係を用意して、この写真を担当してもらう
     // TODO: VNImageRequestHandlerのインスタンスを作る(cgImageを渡す)
@@ -48,7 +48,9 @@ func countStickers(in image: UIImage) -> Int {
     
     // ⑤ 一番外側の輪郭だけに絞る
     // TODO: topLevelContoursを取得する
-    let contours = result.topLevelContours
+    let topContours = result.topLevelContours
+    let secondContours = topContours.flatMap { $0.childContours }
+    let contours = topContours + secondContours
     let validData = contours.map{ validData in
         return validData.normalizedPath.boundingBox.width * validData.normalizedPath.boundingBox.height
     }
@@ -96,6 +98,26 @@ func countStickers(in image: UIImage) -> Int {
     // ④ 合計面積を計算する
     let sumArea = sortedAreas.reduce(0, +)
     let sheets = Int(round(sumArea / middleItem))
+    
+    // 1段目: 一番外側の輪郭(今の contours)
+    // 2段目: 1段目の、子どもたち
+    let level2 = contours.flatMap { $0.childContours }
+
+    // 3段目: 2段目の、子どもたち
+    // TODO: level2 を使って、同じ形で書く
+    let level3 = level2.flatMap { $0.childContours }
+
+    // 4段目: 3段目の、子どもたち
+    // TODO: 同じ形で書く
+    let level4 = level3.flatMap { $0.childContours }
+
+    print("1段目：\(contours.count)")
+    print("2段目：\(level2.count)")
+    print("3段目：\(level3.count)")
+    print("4段目：\(level4.count)")
+    
+    print("すべての輪郭：\(result.contourCount)")
+    print("一番外側の輪郭：\(result.topLevelContourCount)")
 
     // ⑤ 推定枚数 = 合計面積 ÷ 中央値(小数点は四捨五入)v
     return sheets   // validContours.count の代わりにこちらを返す

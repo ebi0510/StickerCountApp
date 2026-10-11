@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-func test(in image: UIImage) -> UIImage?{
+func makeMask(in image: UIImage) -> UIImage?{
     guard let cgImage = image.cgImage else { return nil}
     
     let imageWidth = cgImage.width
@@ -38,12 +38,6 @@ func test(in image: UIImage) -> UIImage?{
             }
         }
     }
-    // 色付きピクセル/全体のピクセル数＝色付きの割合
-    print(Double(pixelCount)/Double(imageHeight*imageWidth))
-    
-    print(imagePixels[0])
-    print(imagePixels[1])
-    print(imagePixels[2])
     
     // 色なし（白）を黒に、色ありを白に変換したデータを作成する
     var maskPixels = [UInt8](repeating: 255, count: imageWidth * imageHeight * 4)
@@ -55,7 +49,7 @@ func test(in image: UIImage) -> UIImage?{
             let b = imagePixels[index + 2]
             
             let rgbDifference = max(r, g, b) - min(r, g, b)
-            if rgbDifference < 30{
+            if rgbDifference < 65{
                 maskPixels[index] = 0
                 maskPixels[index+1]=0
                 maskPixels[index+2]=0

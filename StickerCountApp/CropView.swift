@@ -12,16 +12,19 @@ struct CropView: View {
     
     var onCropped: (UIImage) -> Void
     // 枠の現在位置
-    @State private var cropOffset: CGSize = .zero
+    @State private var cropOffset: CGSize = CGSize(width: 0, height: 23.3)
     @State private var lastOffset: CGSize = .zero
     
     // 枠の大きさ
-    @State private var cropSize: CGSize = CGSize(width: 200, height: 200)
+    @State private var cropSize: CGSize = CGSize(width: 382, height: 207)
     @State private var lastSize: CGSize = CGSize(width: 200, height: 200)
     
     // 画像の基準位置・サイズ、枠のoffsetする前の基準位置
     @State private var imageFrame: CGRect = .zero
     @State private var rectBaseFrame: CGRect = .zero
+    
+    // テスト用
+    @State private var maskImage: UIImage? = nil
     
     var body: some View {
         VStack {
@@ -99,8 +102,24 @@ struct CropView: View {
                     onCropped(cropped)
                 }
             }
+            
+            // テスト用
+            Button("モノクロ"){
+                if let cropped = cropImage(),
+                   let mask = makeMask(in: cropped){
+                    maskImage = mask
+                }
+            }
+            
+            if let maskImage {
+                Image(uiImage: maskImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 150)
+            }
         }
     }
+    
     
     func cropImage() -> UIImage? {
         guard let cgImage = image.cgImage else { return nil }
@@ -139,9 +158,4 @@ struct CropView: View {
         
         return UIImage(cgImage: croppedCGImage)
     }
-}
-
-#Preview {
-    CropView(image: UIImage(named: "testPanel3")!,
-             onCropped: { _ in })
 }
