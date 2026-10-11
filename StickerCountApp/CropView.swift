@@ -12,19 +12,16 @@ struct CropView: View {
     
     var onCropped: (UIImage) -> Void
     // 枠の現在位置
-    @State private var cropOffset: CGSize = CGSize(width: 0, height: 23.3)
+    @State private var cropOffset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
     
     // 枠の大きさ
-    @State private var cropSize: CGSize = CGSize(width: 382, height: 207)
+    @State private var cropSize: CGSize = CGSize(width: 200, height: 200)
     @State private var lastSize: CGSize = CGSize(width: 200, height: 200)
     
     // 画像の基準位置・サイズ、枠のoffsetする前の基準位置
     @State private var imageFrame: CGRect = .zero
     @State private var rectBaseFrame: CGRect = .zero
-    
-    // テスト用
-    @State private var maskImage: UIImage? = nil
     
     var body: some View {
         VStack {
@@ -39,11 +36,9 @@ struct CropView: View {
                             Color.clear
                                 .onAppear {
                                     imageFrame = geo.frame(in: .named("cropSpace"))
-                                    print("onAppear: \(geo.size)")
                                 }
                                 .onChange(of: geo.size) { oldValue, newValue in
                                     imageFrame = geo.frame(in: .named("cropSpace"))
-                                    print("onChange: \(geo.size)")
                                 }
                         }
                     )
@@ -102,21 +97,6 @@ struct CropView: View {
                     onCropped(cropped)
                 }
             }
-            
-            // テスト用
-            Button("モノクロ"){
-                if let cropped = cropImage(),
-                   let mask = makeMask(in: cropped){
-                    maskImage = mask
-                }
-            }
-            
-            if let maskImage {
-                Image(uiImage: maskImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 150)
-            }
         }
     }
     
@@ -143,13 +123,6 @@ struct CropView: View {
         let height = cropSize.height * scaleY
         
         let pixelRect = CGRect(x: x, y: y, width: width, height: height)
-        
-        print("imageFrame: \(imageFrame)")
-        print("rectBaseFrame: \(rectBaseFrame)")
-        print("cropOffset: \(cropOffset)")
-        print("cropSize: \(cropSize)")
-        print("pixelRect: \(pixelRect)")
-        print("元画像サイズ: \(cgImage.width) x \(cgImage.height)")
         
         guard let croppedCGImage = cgImage.cropping(to: pixelRect) else {
             print("切り抜きに失敗しました")

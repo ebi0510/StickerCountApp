@@ -1,5 +1,5 @@
 //
-//  Test.swift
+//  MakeMask.swift
 //  StickerCountApp
 //
 //  Created by 岡野春菜 on 2026/10/07.
@@ -24,21 +24,6 @@ func makeMask(in image: UIImage) -> UIImage?{
     
     cgContext.draw(cgImage, in: CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight))
     
-    var pixelCount:Int = 0
-    for y in 0 ..< imageHeight {
-        for x in 0 ..< imageWidth {
-            let index = (y * imageWidth + x) * 4
-            let r = imagePixels[index]
-            let g = imagePixels[index+1]
-            let b = imagePixels[index+2]
-            // 30以下の場合、白と判定して数えない
-            if max(r, g, b) - min(r, g, b) > 30{
-                // 色がついているピクセルの数
-                pixelCount = pixelCount + 1
-            }
-        }
-    }
-    
     // 色なし（白）を黒に、色ありを白に変換したデータを作成する
     var maskPixels = [UInt8](repeating: 255, count: imageWidth * imageHeight * 4)
     for y in 0 ..< imageHeight {
@@ -49,7 +34,9 @@ func makeMask(in image: UIImage) -> UIImage?{
             let b = imagePixels[index + 2]
             
             let rgbDifference = max(r, g, b) - min(r, g, b)
-            if rgbDifference < 65{
+            
+            //閾値が60以上は色ありと判定する
+            if rgbDifference < 60{
                 maskPixels[index] = 0
                 maskPixels[index+1]=0
                 maskPixels[index+2]=0
