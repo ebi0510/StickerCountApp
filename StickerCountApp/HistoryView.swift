@@ -16,9 +16,16 @@ struct HistoryView: View {
     var body: some View {
         List { ForEach(records) { record in
             HStack {
-                Text("\(record.date.formatted(date: .abbreviated, time: .omitted))")
+                Text(record.date.formatted(
+                    .dateTime
+                    .year()
+                    .month(.twoDigits)
+                    .day(.twoDigits)
+                    .locale(Locale(identifier: "ja_JP"))
+                ))
+
                 Text(record.name)
-                Text("\(record.totalStickerCount)")
+                Text("\(record.totalStickerCount)枚")
             }
         }
         .onDelete { indexSet in

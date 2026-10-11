@@ -26,6 +26,7 @@ struct CropView: View {
     var body: some View {
         VStack {
             Text("パネルがまっすぐ、画面いっぱいに写るようにトリミングしてください")
+                .padding(25)
             
             ZStack {
                 Image(uiImage: image)
@@ -77,6 +78,7 @@ struct CropView: View {
                                 }
                         )
                 }
+                
                 .background(
                     GeometryReader { geo in
                         Color.clear
@@ -91,12 +93,14 @@ struct CropView: View {
                 .offset(cropOffset)
             }
             .coordinateSpace(name: "cropSpace")
+            .padding(.horizontal, 15)
             
             Button("確定") {
                 if let cropped = cropImage() {
                     onCropped(cropped)
                 }
             }
+            .padding(25)
         }
     }
     

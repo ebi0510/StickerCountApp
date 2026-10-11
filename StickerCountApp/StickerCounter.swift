@@ -47,10 +47,6 @@ func countStickers(in image: UIImage) -> Int {
     let topContours = result.topLevelContours
     let secondContours = topContours.flatMap { $0.childContours }
     let allContours = topContours + secondContours
-    let overData = allContours.filter { contour in
-        let overArea = contour.normalizedPath.boundingBox.width * contour.normalizedPath.boundingBox.height
-        return overArea >  maxArea
-    }
     
     // サイズが妥当な輪郭だけにフィルタリングする
     let validContours = allContours.filter { contour in
