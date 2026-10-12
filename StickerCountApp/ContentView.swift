@@ -39,7 +39,16 @@ struct ContentView: View {
                 ResultView(count: count,
                            onRecorded: {
                     flow = .history
-                })
+                },
+                           onRecropped: {
+                    if let capturedImage = capturedImage {
+                        flow = .crop(capturedImage)
+                    }
+                },
+                           onReturn: {
+                    flow = .history
+                }
+                )
             }
         }
         .onChange(of: capturedImage) { oldValue, newValue in

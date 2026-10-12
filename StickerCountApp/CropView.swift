@@ -24,9 +24,20 @@ struct CropView: View {
     @State private var rectBaseFrame: CGRect = .zero
     
     var body: some View {
-        VStack {
-            Text("パネルがまっすぐ、画面いっぱいに写るようにトリミングしてください")
-                .padding(25)
+        VStack(alignment: .center) {
+            Group {
+                Text("黄色い枠でシールが貼ってある範囲を囲ってください")
+                    .multilineTextAlignment(.center)
+                Text("その際以下に注意してください")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                Text("回答枠まで含めること\n回答枠の線と黄色い枠が重ならないこと\nシール以外のものが入りすぎないようにすること")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal,25)
             
             ZStack {
                 Image(uiImage: image)
@@ -100,7 +111,10 @@ struct CropView: View {
                     onCropped(cropped)
                 }
             }
-            .padding(25)
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.capsule)
+            .controlSize(.regular)
+            .padding(10)
         }
     }
     
