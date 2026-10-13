@@ -10,9 +10,22 @@
 		04CE2BCF304C520C001FC25E /* StickerCountApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StickerCountApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		043F3298307E636E00116642 /* Exceptions for "StickerCountApp" folder in "StickerCountApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 04CE2BCE304C520C001FC25E /* StickerCountApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		04CE2BD1304C520C001FC25E /* StickerCountApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				043F3298307E636E00116642 /* Exceptions for "StickerCountApp" folder in "StickerCountApp" target */,
+			);
 			path = StickerCountApp;
 			sourceTree = "<group>";
 		};
