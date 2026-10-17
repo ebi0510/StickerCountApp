@@ -45,10 +45,7 @@ struct ResultView: View {
                 onRecorded()
             }
             .disabled(name.isEmpty)
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.capsule)
-            .controlSize(.regular)
-            .padding(10)
+            .modifier(MainButtonStyle())
             
             HStack(spacing: 20) {
                 Button("再トリミング"){
