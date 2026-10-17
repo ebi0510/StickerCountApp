@@ -11,12 +11,12 @@ struct CropView: View {
     let image: UIImage
     
     var onCropped: (UIImage) -> Void
-    // 枠の現在位置
-    @State private var cropOffset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+    // 枠の現在位置（後でcropOffsetを.zeroに戻す。TS 205枚。iOS 86）
+    @State private var cropOffset: CGSize = CGSize(width: -1, height: 30.33)
+    @State private var lastOffset: CGSize = CGSize(width: 200, height: 200)
     
-    // 枠の大きさ
-    @State private var cropSize: CGSize = CGSize(width: 200, height: 200)
+    // 枠の大きさ（cropSizeを後でCGSize(width: 200, height: 200)に戻す）
+    @State private var cropSize: CGSize = CGSize(width: 348, height: 179)
     @State private var lastSize: CGSize = CGSize(width: 200, height: 200)
     
     // 画像の基準位置・サイズ、枠のoffsetする前の基準位置
@@ -71,6 +71,7 @@ struct CropView: View {
                                 }
                                 .onEnded { value in
                                     lastOffset = cropOffset
+                                    print("位置：\(cropOffset)")
                                 }
                         )
                     
@@ -86,6 +87,7 @@ struct CropView: View {
                                 }
                                 .onEnded { value in
                                     lastSize = cropSize
+                                    print("サイズ：\(cropSize)")
                                 }
                         )
                 }
@@ -111,10 +113,7 @@ struct CropView: View {
                     onCropped(cropped)
                 }
             }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.capsule)
-            .controlSize(.regular)
-            .padding(10)
+            .modifier(MainButtonStyle())
         }
     }
     
