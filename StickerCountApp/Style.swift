@@ -38,17 +38,13 @@ extension View {
     }
 }
 
-//extension View {
-//    func ButtonStyle(){
-//        self.modifier(MainButtonStyle)
-//    }
-//}
-
-extension Color{
-    static let backgroundColor = Color("LightBlue")
+extension View {
+    func mainButtonStyle() -> some View{
+        self.modifier(ButtonStyleModifier())
+    }
 }
 
-struct MainButtonStyle: ViewModifier {
+struct ButtonStyleModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .buttonStyle(.borderedProminent)
