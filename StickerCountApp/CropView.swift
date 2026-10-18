@@ -29,6 +29,7 @@ struct CropView: View {
                 Text("黄色い枠でシールが貼ってある範囲を囲ってください")
                     .multilineTextAlignment(.center)
                     .textStyle(.titleText)
+                    .padding(10)
                 Text("その際以下に注意してください")
                     .textStyle(.subText)
                     .multilineTextAlignment(.center)
