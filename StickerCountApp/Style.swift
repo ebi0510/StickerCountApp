@@ -19,7 +19,6 @@ enum TextStyle{
     case subText
     case captionText
     
-    
     var textFont: Font {
         switch self {
         case .titleText:
