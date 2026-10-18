@@ -19,7 +19,7 @@ struct ResultView: View {
     var body: some View {
         VStack(alignment: .center) {
             Text("シールの数: \(count)枚")
-                .font(.title)
+                .textStyle(.titleText)
             TextField("カンファレンス名を入力", text: $name)
                 .multilineTextAlignment(.center)
                 .padding(15)

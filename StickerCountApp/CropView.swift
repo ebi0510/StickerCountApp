@@ -28,12 +28,12 @@ struct CropView: View {
             Group {
                 Text("黄色い枠でシールが貼ってある範囲を囲ってください")
                     .multilineTextAlignment(.center)
+                    .textStyle(.titleText)
                 Text("その際以下に注意してください")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .textStyle(.subText)
                     .multilineTextAlignment(.center)
                 Text("回答枠まで含めること\n回答枠の線と黄色い枠が重ならないこと\nシール以外のものが入りすぎないようにすること")
-                    .font(.caption)
+                    .textStyle(.captionText)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
