@@ -13,7 +13,7 @@ struct CropView: View {
     var onCropped: (UIImage) -> Void
     // 枠の現在位置
     @State private var cropOffset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+    @State private var lastOffset: CGSize = CGSize(width: 200, height: 200)
     
     // 枠の大きさ
     @State private var cropSize: CGSize = CGSize(width: 200, height: 200)
@@ -28,12 +28,13 @@ struct CropView: View {
             Group {
                 Text("黄色い枠でシールが貼ってある範囲を囲ってください")
                     .multilineTextAlignment(.center)
+                    .textStyle(.titleText)
+                    .padding(10)
                 Text("その際以下に注意してください")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .textStyle(.subText)
                     .multilineTextAlignment(.center)
                 Text("回答枠まで含めること\n回答枠の線と黄色い枠が重ならないこと\nシール以外のものが入りすぎないようにすること")
-                    .font(.caption)
+                    .textStyle(.captionText)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
@@ -71,6 +72,7 @@ struct CropView: View {
                                 }
                                 .onEnded { value in
                                     lastOffset = cropOffset
+                                    print("位置：\(cropOffset)")
                                 }
                         )
                     
@@ -86,10 +88,10 @@ struct CropView: View {
                                 }
                                 .onEnded { value in
                                     lastSize = cropSize
+                                    print("サイズ：\(cropSize)")
                                 }
                         )
                 }
-                
                 .background(
                     GeometryReader { geo in
                         Color.clear
@@ -111,10 +113,7 @@ struct CropView: View {
                     onCropped(cropped)
                 }
             }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.capsule)
-            .controlSize(.regular)
-            .padding(10)
+            .mainButtonStyle()
         }
     }
     
